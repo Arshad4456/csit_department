@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Prediction Tool</title>
+
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+.subjectContainer {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+/* #subjects {
+    margin-bottom: 10px;
+} */
+
+#subjects > div {
+    margin-bottom: 10px;
+}
+
+label {
+    display: inline-block;
+    width: 100px;
+    vertical-align: top; /* Align labels to the top */
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 10px;
+    vertical-align: top; /* Align inputs to the top */
+}
+
+button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 5px;
+    vertical-align: top; /* Align buttons to the top */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+p {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
+
+#resetButton {
+    background-color: #b24a62;
+    position: absolute;
+    
+    /* bottom: 10px; */
+    right: 50px;
+}
+
+#resetButton:hover{
+    background-color: #b9143b;
+}
+
+.individualResult {
+    margin-left: 10px;
+    font-weight: bold;
+    display: inline-block; /* Ensure individual result appears inline */
+    vertical-align: top; /* Align individual result to the top */
+}
+
+#result {
+    background-color: coral;
+    border: 1px solid #ccc;                      
+    text-align: center;
+    margin-top: 20px;
+    /* padding: 10px; */
+    font-weight: bold;
+    animation: mymove 5s infinite;
+}
+@keyframes mymove {
+    50% {background-color: lightblue;}
+    
+}
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>GPA Calculations Tool</h1>
+        
+        <div id="subjects">
+            <!-- Subjects and corresponding grade dropdowns will be added here dynamically -->
+        </div>
+
+        <button onclick="addSubject()">Add Subject</button>
+        <button onclick="calculateOverallGPA()">Calculate Overall GPA</button>
+        <button id="resetButton" onclick="resetForm()">Reset</button>
+        <p id="result"></p>
+
+        
+    
+    </div>
+
+    <script>
+        // Grading system
+        const gradingSystem = {
+            A: 4.00,
+            'B+': 3.50,
+            B: 3.00,
+            'C+': 2.50,
+            C: 2.00,
+            'D+': 1.50,
+            D: 1.00,
+            F: 0.00
+        };
+
+        // Function to add a new subject field
+        function addSubject() {
+            const subjectsDiv = document.getElementById('subjects');
+            const newSubjectDiv = document.createElement('div');
+            newSubjectDiv.innerHTML = `
+                <div class="subjectContainer">
+                    <label for="subject">Subject:</label>
+                    <select name="subject">
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="English">English</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                    <label for="grade">Grade:</label>
+                    <select name="grade">
+                        <option value="A">A</option>
+                        <option value="B+">B+</option>
+                        <option value="B">B</option>
+                        <option value="C+">C+</option>
+                        <option value="C">C</option>
+                        <option value="D+">D+</option>
+                        <option value="D">D</option>
+                        <option value="F">F</option>
+                    </select>
+                    <label for="creditHours">Credit Hours:</label>
+                    <input type="number" name="creditHours" value="1">
+                    <button onclick="calculateIndividualGPs(this)">Calculate GPs</button>
+                    <button onclick="deleteSubject(this)">Delete Subject</button>
+                    <span class="individualResult"></span>
+                </div>
+            `;
+            subjectsDiv.appendChild(newSubjectDiv);
+        }
+
+        // Function to calculate individual GPA for a subject
+        function calculateIndividualGPs(button) {
+            const subjectDiv = button.parentElement;
+            const grade = subjectDiv.querySelector('[name="grade"]').value;
+            const creditHour = parseInt(subjectDiv.querySelector('[name="creditHours"]').value);
+            const gradePoint = gradingSystem[grade];
+            const individualGPs = gradePoint * creditHour; // Calculate Grade points
+            subjectDiv.querySelector('.individualResult').textContent = `Individual Grade Points = ${individualGPs.toFixed(2)}`;
+        }
+
+        // Function to delete a subject
+        function deleteSubject(button) {
+            const subjectDiv = button.parentElement;
+            subjectDiv.remove();
+        }
+
+        // Function to calculate overall GPA
+        function calculateOverallGPA() {
+            const subjects = document.getElementsByName('subject');
+            const grades = document.getElementsByName('grade');
+            const creditHours = document.getElementsByName('creditHours');
+            let totalGradePoints = 0;
+            let totalCreditHours = 0;
+
+            for (let i = 0; i < subjects.length; i++) {
+                const grade = grades[i].value;
+                const creditHour = parseInt(creditHours[i].value);
+                const gradePoint = gradingSystem[grade];
+                totalGradePoints += gradePoint * creditHour;
+                totalCreditHours += creditHour;
+            }
+
+            const overallGPA = totalGradePoints / totalCreditHours;
+            
+            // Displaying overall GPA, total credit hours, and total grade points
+            const resultParagraph = document.getElementById('result');
+            resultParagraph.innerHTML = `Overall GPA: ${overallGPA.toFixed(2)}<br>`;
+            resultParagraph.innerHTML += `Total Credit Hours: ${totalCreditHours}<br>`;
+            resultParagraph.innerHTML += `Total Grade Points: ${totalGradePoints.toFixed(2)}`;    
+        }
+
+        function resetForm() {
+    const subjectsDiv = document.getElementById('subjects');
+    subjectsDiv.innerHTML = ''; // Clear all subjects
+
+    const resultParagraph = document.getElementById('result');
+    resultParagraph.textContent = ''; // Clear overall GPA result, total credit hours, and total grade points
+
+}
+    </script>
+
+</body>
+</html>
