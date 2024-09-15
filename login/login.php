@@ -74,6 +74,7 @@ $conn->close();
     }
     .login-form {
       max-width: 400px;
+      margin: 50px auto;
       width: 100%;
       background: #fff;
       padding: 30px;
@@ -94,7 +95,7 @@ $conn->close();
     .password-container .fa-eye {
       position: absolute;
       right: 10px;
-      top: 50%;
+      top: 73%;
       transform: translateY(-50%);
       cursor: pointer;
       color: #2c3be3;
@@ -121,11 +122,11 @@ $conn->close();
           </select>
         </div>
         <div class="form-group" id="emailOrRegNo">
-          <label for="email">Email:</label>
+          <label for="email">Username:</label>
           <input type="email" class="form-control" id="email" name="email" required>
         </div>
         <div class="form-group" id="registrationNo" style="display: none;">
-          <label for="registration_no">Registration Number:</label>
+          <label for="registration_no">Usename:</label>
           <input type="text" class="form-control" id="registration_no" name="registration_no">
         </div>
         <div class="form-group password-container">
