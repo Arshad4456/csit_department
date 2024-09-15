@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('login_dashboard/db_connection.php');
+include('login_db_connection.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userType = $_POST['user_type'];
