@@ -115,10 +115,10 @@ $conn->close();
           <label for="userType">User Type:</label>
           <select class="form-control" id="userType" name="user_type" required>
             <option value="" disabled selected>Select User Type</option>
-            <option value="admin">Administration</option>
+            <option value="admin">Admin</option>
+            <option value="monitor">Monitor</option>
             <option value="faculty">Faculty Member</option>
             <option value="student">Student</option>
-            <option value="monitor">Monitor</option>
           </select>
         </div>
         <div class="form-group" id="emailOrRegNo">
@@ -134,6 +134,11 @@ $conn->close();
           <input type="password" class="form-control" id="password" name="password" required>
           <i class="fas fa-eye" id="togglePassword"></i>
         </div>
+        <div class="checkbox mb-3">
+              <label>
+                <input type="checkbox" value="remember-me"> Remember me
+              </label>
+            </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
       </form>
     </div>
