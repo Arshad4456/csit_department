@@ -1,21 +1,10 @@
 <?php
-$conn = new mysqli('localhost', 'root', '', 'csit_login_db');
+include 'db_connection.php';
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$id = $_GET['id'];
+$query = "SELECT * FROM users WHERE id = $id";
+$result = mysqli_query($conn, $query);
+$data = mysqli_fetch_assoc($result);
 
-if (isset($_POST['id'])) {
-    $id = $conn->real_escape_string($_POST['id']);
-    $sql = "SELECT * FROM users WHERE ID = '$id'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        echo json_encode($result->fetch_assoc());
-    } else {
-        echo json_encode(['error' => 'User not found']);
-    }
-}
-
-$conn->close();
+echo json_encode($data);
 ?>
