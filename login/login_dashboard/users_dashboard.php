@@ -27,6 +27,7 @@ $result = mysqli_query($conn, $sql);
         <h2>Users Dashboard</h2>
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Add Single User</button>
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addMultipleUserModal">Add Multiple Users</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#testmodal">Add Multiple Users</button>
 
         <table class="table table-bordered">
             <thead>
