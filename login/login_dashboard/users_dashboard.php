@@ -1,140 +1,169 @@
 <?php
+// Include database connection
 include 'db_connection.php';
 
-// Fetch user data
-$query = "SELECT * FROM users";
-$result = mysqli_query($conn, $query);
-
-// Display status messages
-if (isset($_GET['status'])) {
-    if ($_GET['status'] == 'success') {
-        echo '<div class="alert alert-success">User updated successfully!</div>';
-    } elseif ($_GET['status'] == 'error') {
-        echo '<div class="alert alert-danger">Failed to update user. Please try again.</div>';
-    }
-}
+// Fetch users
+$sql = "SELECT * FROM users";
+$result = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Include custom CSS (optional) -->
+    <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
+
 <body>
     <div class="container mt-5">
         <h2>Users Dashboard</h2>
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addModal">Add User</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Add Single User</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addMultipleUserModal">Add Multiple Users</button>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Honorific</th>
                     <th>Name</th>
-                    <!-- <th>Father Name</th> -->
-                    <!-- <th>Gender</th> -->
                     <th>Email</th>
-                    <!-- <th>CNIC</th> -->
-                    <!-- <th>Employee Number</th> -->
-                    <th>Designation</th>
-                    <!-- <th>Contact Number</th> -->
-                    <!-- <th>Address</th> -->
-                    <!-- <th>Qualification</th> -->
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                <?php while ($user = mysqli_fetch_assoc($result)) { ?>
                     <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['honorific']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
-                        <!-- <td><?php echo $row['father_name']; ?></td> -->
-                        <!-- <td><?php echo $row['gender']; ?></td> -->
-                        <td><?php echo $row['email']; ?></td>
-                        <!-- <td><?php echo $row['cnic']; ?></td> -->
-                        <!-- <td><?php echo $row['employee_number']; ?></td> -->
-                        <td><?php echo $row['designation']; ?></td>
-                        <!-- <td><?php echo $row['contact_number']; ?></td> -->
-                        <!-- <td><?php echo $row['address']; ?></td> -->
-                        <!-- <td><?php echo $row['qualification']; ?></td> -->
+                        <td><?php echo $user['id']; ?></td>
+                        <td><?php echo $user['name']; ?></td>
+                        <td><?php echo $user['email']; ?></td>
                         <td>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal" data-id="<?php echo $row['id']; ?>" data-honorific="<?php echo $row['honorific']; ?>" data-name="<?php echo $row['name']; ?>" data-father_name="<?php echo $row['father_name']; ?>" data-gender="<?php echo $row['gender']; ?>" data-email="<?php echo $row['email']; ?>" data-cnic="<?php echo $row['cnic']; ?>" data-employee_number="<?php echo $row['employee_number']; ?>" data-designation="<?php echo $row['designation']; ?>" data-contact_number="<?php echo $row['contact_number']; ?>" data-address="<?php echo $row['address']; ?>" data-qualification="<?php echo $row['qualification']; ?>">Edit</button>
-                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-id="<?php echo $row['id']; ?>">Delete</button>
+                            <button class="btn btn-info" data-toggle="modal" data-target="#viewUserModal" data-id="<?php echo $user['id']; ?>">View</button>
+                            <button class="btn btn-warning" data-toggle="modal" data-target="#editUserModal" data-id="<?php echo $user['id']; ?>">Edit</button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteUserModal" data-id="<?php echo $user['id']; ?>">Delete</button>
                         </td>
                     </tr>
-                <?php endwhile; ?>
+                <?php } ?>
             </tbody>
         </table>
     </div>
 
+    <!-- Add Single User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add Single User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="add_user.php" method="POST">
+                    <div class="modal-body">
+                        <!-- Form fields for adding a user -->
+                        <div class="form-group">
+                            <label for="user_type">User Type</label>
+                            <select class="form-control" id="user_type" name="user_type" required>
+                                <option value="Admin">Admin</option>
+                                <option value="Faculty">Faculty</option>
+                                <option value="Student">Student</option>
+                                <option value="Monitor">Monitor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="honorific">Honorific</label>
+                            <input type="text" class="form-control" id="honorific" name="honorific" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="father_name">Father Name</label>
+                            <input type="text" class="form-control" id="father_name" name="father_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select class="form-control" id="gender" name="gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password_hash" name="password_hash" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="togglePassword()">
+                                        <i class="fas fa-eye" id="eyeIcon"></i>
+                                    </span>
+                                </div>
 
-    <!-- Add User Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cnic">CNIC</label>
+                                <input type="text" class="form-control" id="cnic" name="cnic">
+                            </div>
+                            <div class="form-group">
+                                <label for="employee_number">Employee Number</label>
+                                <input type="text" class="form-control" id="employee_number" name="employee_number">
+                            </div>
+                            <div class="form-group">
+                                <label for="designation">Designation</label>
+                                <input type="text" class="form-control" id="designation" name="designation">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact_number">Contact Number</label>
+                                <input type="text" class="form-control" id="contact_number" name="contact_number">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" id="address" name="address">
+                            </div>
+                            <div class="form-group">
+                                <label for="qualification">Qualification</label>
+                                <input type="text" class="form-control" id="qualification" name="qualification">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save User</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Multiple Users Modal -->
+    <div class="modal fade" id="addMultipleUserModal" tabindex="-1" role="dialog" aria-labelledby="addMultipleUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Add User</h5>
+                <h5 class="modal-title" id="addMultipleUserModalLabel">Add Multiple Users</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="addForm" method="POST" action="add_user.php" enctype="multipart/form-data">
+            <form action="add_multiple_users_process.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="addHonorific">Honorific</label>
-                        <input type="text" class="form-control" id="addHonorific" name="honorific">
-                    </div>
-                    <div class="form-group">
-                        <label for="addName">Name</label>
-                        <input type="text" class="form-control" id="addName" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addFatherName">Father Name</label>
-                        <input type="text" class="form-control" id="addFatherName" name="father_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="addGender">Gender</label>
-                        <input type="text" class="form-control" id="addGender" name="gender">
-                    </div>
-                    <div class="form-group">
-                        <label for="addEmail">Email</label>
-                        <input type="email" class="form-control" id="addEmail" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addCnic">CNIC</label>
-                        <input type="text" class="form-control" id="addCnic" name="cnic">
-                    </div>
-                    <div class="form-group">
-                        <label for="addEmployeeNumber">Employee Number</label>
-                        <input type="text" class="form-control" id="addEmployeeNumber" name="employee_number">
-                    </div>
-                    <div class="form-group">
-                        <label for="addDesignation">Designation</label>
-                        <input type="text" class="form-control" id="addDesignation" name="designation" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addContactNumber">Contact Number</label>
-                        <input type="text" class="form-control" id="addContactNumber" name="contact_number">
-                    </div>
-                    <div class="form-group">
-                        <label for="addAddress">Address</label>
-                        <textarea class="form-control" id="addAddress" name="address"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="addQualification">Qualification</label>
-                        <input type="text" class="form-control" id="addQualification" name="qualification">
-                    </div>
-                    <div class="form-group">
-                        <label for="excelFile">Upload Excel File (optional)</label>
-                        <input type="file" class="form-control-file" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+                        <label for="file">Upload CSV</label>
+                        <input type="file" class="form-control-file" id="file" name="file" accept=".csv" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add User</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
             </form>
         </div>
@@ -142,67 +171,105 @@ if (isset($_GET['status'])) {
 </div>
 
 
-    <!-- Edit User Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <!-- View User Modal -->
+    <div class="modal fade" id="viewUserModal" tabindex="-1" role="dialog" aria-labelledby="viewUserModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+                    <h5 class="modal-title" id="viewUserModalLabel">View User Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="editForm" method="POST" action="edit_user.php">
+                <div class="modal-body">
+                    <div id="userDetails"></div> <!-- Content populated dynamically by JS -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="printView()">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="edit_user.php" method="POST">
                     <div class="modal-body">
-                        <input type="hidden" id="editId" name="id">
+                        <!-- Fields populated dynamically using JavaScript -->
+                        <input type="hidden" id="edit_user_id" name="id">
                         <div class="form-group">
-                            <label for="editHonorific">Honorific</label>
-                            <input type="text" class="form-control" id="editHonorific" name="honorific">
+                            <label for="user_type">User Type</label>
+                            <select class="form-control" id="user_type" name="user_type">
+                                <option value="Admin">Admin</option>
+                                <option value="Faculty">Faculty</option>
+                                <option value="Student">Student</option>
+                                <option value="Monitor">Monitor</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="editName">Name</label>
-                            <input type="text" class="form-control" id="editName" name="name" required>
+                            <label for="honorific">Honorific</label>
+                            <input type="text" class="form-control" id="honorific" name="honorific">
                         </div>
                         <div class="form-group">
-                            <label for="editFatherName">Father Name</label>
-                            <input type="text" class="form-control" id="editFatherName" name="father_name">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="editGender">Gender</label>
-                            <input type="text" class="form-control" id="editGender" name="gender">
+                            <label for="father_name">Father Name</label>
+                            <input type="text" class="form-control" id="father_name" name="father_name">
                         </div>
                         <div class="form-group">
-                            <label for="editEmail">Email</label>
-                            <input type="email" class="form-control" id="editEmail" name="email" required>
+                            <label for="gender">Gender</label>
+                            <select class="form-control" id="gender" name="gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="editCnic">CNIC</label>
-                            <input type="text" class="form-control" id="editCnic" name="cnic">
+                            <label for="password_hash">Password</label>
+                            <input type="password" class="form-control" id="password_hash" name="password_hash">
                         </div>
                         <div class="form-group">
-                            <label for="editEmployeeNumber">Employee Number</label>
-                            <input type="text" class="form-control" id="editEmployeeNumber" name="employee_number">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
                         </div>
                         <div class="form-group">
-                            <label for="editDesignation">Designation</label>
-                            <input type="text" class="form-control" id="editDesignation" name="designation" required>
+                            <label for="cnic">CNIC</label>
+                            <input type="text" class="form-control" id="cnic" name="cnic">
                         </div>
                         <div class="form-group">
-                            <label for="editContactNumber">Contact Number</label>
-                            <input type="text" class="form-control" id="editContactNumber" name="contact_number">
+                            <label for="employee_number">Employee Number</label>
+                            <input type="text" class="form-control" id="employee_number" name="employee_number">
                         </div>
                         <div class="form-group">
-                            <label for="editAddress">Address</label>
-                            <textarea class="form-control" id="editAddress" name="address"></textarea>
+                            <label for="designation">Designation</label>
+                            <input type="text" class="form-control" id="designation" name="designation">
                         </div>
                         <div class="form-group">
-                            <label for="editQualification">Qualification</label>
-                            <input type="text" class="form-control" id="editQualification" name="qualification">
+                            <label for="contact_number">Contact Number</label>
+                            <input type="text" class="form-control" id="contact_number" name="contact_number">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="qualification">Qualification</label>
+                            <input type="text" class="form-control" id="qualification" name="qualification">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -210,21 +277,21 @@ if (isset($_GET['status'])) {
     </div>
 
     <!-- Delete User Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
+                    <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this user?
+                    <p>Are you sure you want to delete this user?</p>
                 </div>
                 <div class="modal-footer">
-                    <form id="deleteForm" method="POST" action="delete_user.php">
-                        <input type="hidden" id="deleteId" name="id">
+                    <form action="delete_user.php" method="POST">
+                        <input type="hidden" id="delete_user_id" name="id">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
@@ -233,46 +300,88 @@ if (isset($_GET['status'])) {
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
     <script>
-        $('#editModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var honorific = button.data('honorific');
-            var name = button.data('name');
-            var fatherName = button.data('father_name');
-            var gender = button.data('gender');
-            var email = button.data('email');
-            var cnic = button.data('cnic');
-            var employeeNumber = button.data('employee_number');
-            var designation = button.data('designation');
-            var contactNumber = button.data('contact_number');
-            var address = button.data('address');
-            var qualification = button.data('qualification');
 
-            var modal = $(this);
-            modal.find('#editId').val(id);
-            modal.find('#editHonorific').val(honorific);
-            modal.find('#editName').val(name);
-            modal.find('#editFatherName').val(fatherName);
-            modal.find('#editGender').val(gender);
-            modal.find('#editEmail').val(email);
-            modal.find('#editCnic').val(cnic);
-            modal.find('#editEmployeeNumber').val(employeeNumber);
-            modal.find('#editDesignation').val(designation);
-            modal.find('#editContactNumber').val(contactNumber);
-            modal.find('#editAddress').val(address);
-            modal.find('#editQualification').val(qualification);
-        });
 
-        $('#deleteModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var modal = $(this);
-            modal.find('#deleteId').val(id);
+    // Function to fetch and populate user data into the Edit Modal
+    $('#editUserModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var userId = button.data('id');
+
+        $.ajax({
+            url: 'fetch_user.php',
+            method: 'POST',
+            data: { id: userId },
+            dataType: 'json',
+            success: function(data) {
+                $('#edit_user_id').val(data.id);
+                $('#user_type').val(data.user_type);
+                $('#honorific').val(data.honorific);
+                $('#name').val(data.name);
+                $('#father_name').val(data.father_name);
+                $('#gender').val(data.gender);
+                $('#password_hash').val(data.password_hash);
+                $('#email').val(data.email);
+                $('#cnic').val(data.cnic);
+                $('#employee_number').val(data.employee_number);
+                $('#designation').val(data.designation);
+                $('#contact_number').val(data.contact_number);
+                $('#address').val(data.address);
+                $('#qualification').val(data.qualification);
+            }
         });
+    });
+
+    // Function to confirm deletion in the Delete Modal
+    $('#deleteUserModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var userId = button.data('id');
+        $('#delete_user_id').val(userId);
+    });
+
+    // Function to populate the View Modal
+    $('#viewUserModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var userId = button.data('id');
+
+        $.ajax({
+            url: 'fetch_user.php',
+            method: 'POST',
+            data: { id: userId },
+            dataType: 'json',
+            success: function(data) {
+                var userDetails = `<p><strong>User Type:</strong> ${data.user_type}</p>
+                                   <p><strong>Name:</strong> ${data.name}</p>
+                                   <p><strong>Email:</strong> ${data.email}</p>`;
+                $('#userDetails').html(userDetails);
+            }
+        });
+    });
+
+
+
+
+            //eyeIcon
+        function togglePassword() {
+    var passwordField = document.getElementById("password_hash");
+    var eyeIcon = document.getElementById("eyeIcon");
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
     </script>
 </body>
+
 </html>

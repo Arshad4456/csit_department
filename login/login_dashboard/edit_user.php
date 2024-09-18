@@ -1,50 +1,31 @@
 <?php
+// Include database connection
 include 'db_connection.php';
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve data from the form
     $id = $_POST['id'];
+    $user_type = $_POST['user_type'];
     $honorific = $_POST['honorific'];
     $name = $_POST['name'];
-    $fatherName = $_POST['father_name'];
+    $father_name = $_POST['father_name'];
     $gender = $_POST['gender'];
+    $password_hash = password_hash($_POST['password_hash'], PASSWORD_BCRYPT);
     $email = $_POST['email'];
     $cnic = $_POST['cnic'];
-    $employeeNumber = $_POST['employee_number'];
+    $employee_number = $_POST['employee_number'];
     $designation = $_POST['designation'];
-    $contactNumber = $_POST['contact_number'];
+    $contact_number = $_POST['contact_number'];
     $address = $_POST['address'];
     $qualification = $_POST['qualification'];
 
-    // Update query
-    $query = "UPDATE users SET
-              honorific = '$honorific',
-              name = '$name',
-              father_name = '$fatherName',
-              gender = '$gender',
-              email = '$email',
-              cnic = '$cnic',
-              employee_number = '$employeeNumber',
-              designation = '$designation',
-              contact_number = '$contactNumber',
-              address = '$address',
-              qualification = '$qualification'
-              WHERE id = $id";
+    $sql = "UPDATE users SET user_type='$user_type', honorific='$honorific', name='$name', father_name='$father_name', gender='$gender', password_hash='$password_hash', 
+            email='$email', cnic='$cnic', employee_number='$employee_number', designation='$designation', contact_number='$contact_number', address='$address', 
+            qualification='$qualification' WHERE id='$id'";
 
-    // Execute query
-    if (mysqli_query($conn, $query)) {
-        // Redirect to the dashboard with success message
-        header("Location: users_dashboard.php?status=success");
+    if (mysqli_query($conn, $sql)) {
+        header("Location: users_dashboard.php?message=UserUpdated");
     } else {
-        // Redirect to the dashboard with error message
-        header("Location: users_dashboard.php?status=error");
+        echo "Error: " . mysqli_error($conn);
     }
-
-    // Close the database connection
-    mysqli_close($conn);
-} else {
-    // If not a POST request, redirect to the dashboard
-    header("Location: users_dashboard.php");
 }
 ?>

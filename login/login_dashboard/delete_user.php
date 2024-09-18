@@ -1,11 +1,16 @@
 <?php
+// Include database connection
 include 'db_connection.php';
 
-$id = $_POST['id'];
-$query = "DELETE FROM users WHERE id = $id";
-mysqli_query($conn, $query);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
 
-// Redirect to the dashboard with success message
-header("Location: users_dashboard.php?status=success");
-echo 'User deleted successfully.';
+    $sql = "DELETE FROM users WHERE id='$id'";
+
+    if (mysqli_query($conn, $sql)) {
+        header("Location: users_dashboard.php?message=UserDeleted");
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+}
 ?>
