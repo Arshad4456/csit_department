@@ -1,16 +1,26 @@
 <?php
-// Include database connection
+session_start(); // Start the session
 include 'db_connection.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST['id'];
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get user ID from POST
+    $user_id = $mysqli->real_escape_string($_POST['user_id']);
 
-    $sql = "DELETE FROM users WHERE id='$id'";
+    // Delete user from the database
+    $sql = "DELETE FROM users WHERE id='$user_id'";
 
-    if (mysqli_query($conn, $sql)) {
-        header("Location: users_dashboard.php?message=UserDeleted");
+    if ($mysqli->query($sql) === TRUE) {
+        // Set success message
+        $_SESSION['success_message'] = "User deleted successfully!";
+        // Redirect to users_dashboard.php
+        header("Location: users_dashboard.php");
+        exit();
     } else {
-        echo "Error: " . mysqli_error($conn);
+        echo "Error: " . $mysqli->error;
     }
+
+    // Close connection
+    $mysqli->close();
 }
 ?>

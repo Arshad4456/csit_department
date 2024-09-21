@@ -5,6 +5,8 @@ USE csit_login_db;
 
 -- Add table and columns for storing additional details
 ADD TABLE users
+
+ADD COLUMN user_type VARCHAR(255),
 ADD COLUMN honorific VARCHAR(255),
 ADD COLUMN name VARCHAR(255),
 ADD COLUMN father_name VARCHAR(255),

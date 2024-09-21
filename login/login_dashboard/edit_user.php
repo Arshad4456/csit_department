@@ -1,31 +1,38 @@
 <?php
-// Include database connection
+session_start(); // Start the session
 include 'db_connection.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST['id'];
-    $user_type = $_POST['user_type'];
-    $honorific = $_POST['honorific'];
-    $name = $_POST['name'];
-    $father_name = $_POST['father_name'];
-    $gender = $_POST['gender'];
-    $password_hash = password_hash($_POST['password_hash'], PASSWORD_BCRYPT);
-    $email = $_POST['email'];
-    $cnic = $_POST['cnic'];
-    $employee_number = $_POST['employee_number'];
-    $designation = $_POST['designation'];
-    $contact_number = $_POST['contact_number'];
-    $address = $_POST['address'];
-    $qualification = $_POST['qualification'];
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get user data from POST
+    $user_id = $mysqli->real_escape_string($_POST['user_id']);
+    $user_type = $mysqli->real_escape_string($_POST['user_type']);
+    $honorific = $mysqli->real_escape_string($_POST['honorific']);
+    $name = $mysqli->real_escape_string($_POST['name']);
+    $father_name = $mysqli->real_escape_string($_POST['father_name']);
+    $gender = $mysqli->real_escape_string($_POST['gender']);
+    $cnic = $mysqli->real_escape_string($_POST['cnic']);
+    $employee_number = $mysqli->real_escape_string($_POST['employee_number']);
+    $designation = $mysqli->real_escape_string($_POST['designation']);
+    $contact_number = $mysqli->real_escape_string($_POST['contact_number']);
+    $address = $mysqli->real_escape_string($_POST['address']);
+    $qualification = $mysqli->real_escape_string($_POST['qualification']);
+    $email = $mysqli->real_escape_string($_POST['email']);
+    
+    // Update user in the database
+    $sql = "UPDATE users SET user_type='$user_type', honorific='$honorific', name='$name', father_name='$father_name', gender='$gender', cnic='$cnic', employee_number='$employee_number', designation='$designation', contact_number='$contact_number', address='$address', qualification='$qualification', email='$email' WHERE id='$user_id'";
 
-    $sql = "UPDATE users SET user_type='$user_type', honorific='$honorific', name='$name', father_name='$father_name', gender='$gender', password_hash='$password_hash', 
-            email='$email', cnic='$cnic', employee_number='$employee_number', designation='$designation', contact_number='$contact_number', address='$address', 
-            qualification='$qualification' WHERE id='$id'";
-
-    if (mysqli_query($conn, $sql)) {
-        header("Location: users_dashboard.php?message=UserUpdated");
+    if ($mysqli->query($sql) === TRUE) {
+        // Set success message
+        $_SESSION['success_message'] = "User updated successfully!";
+        // Redirect to users_dashboard.php
+        header("Location: users_dashboard.php");
+        exit();
     } else {
-        echo "Error: " . mysqli_error($conn);
+        echo "Error: " . $sql . "<br>" . $mysqli->error;
     }
+
+    // Close connection
+    $mysqli->close();
 }
 ?>
