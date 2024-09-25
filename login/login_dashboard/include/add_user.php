@@ -4,6 +4,9 @@ include 'db_connection.php'; // Include your DB connection
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_type = $_POST['user_type'];
 
+    // Initialize statement variable
+    $stmt = null;
+
     if ($user_type == 'student') {
         $name = $_POST['student_name'];
         $father_name = $_POST['father_name'];
@@ -33,16 +36,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } elseif ($user_type == 'monitor') {
             $query = "INSERT INTO monitors (name, designation, email, password_hash) VALUES (?, ?, ?, ?)";
         } elseif ($user_type == 'faculty') {
-            $query = "INSERT INTO faculties (name, designation, email, password_hash) VALUES (?, ?, ?, ?)";
+            $query = "INSERT INTO faculty (name, designation, email, password_hash) VALUES (?, ?, ?, ?)";
         }
+
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("ssss", $name, $designation, $email, $password_hash);
     }
 
+    // Execute the statement and check for success
     if ($stmt->execute()) {
         header("Location: users_dashboard.php?success=1");
     } else {
         header("Location: users_dashboard.php?error=1");
     }
+
+    // Close the statement and connection
+    $stmt->close();
+    $mysqli->close();
+} else {
+    // If the request method is not POST, redirect back to the dashboard
+    header("Location: users_dashboard.php");
 }
 ?>

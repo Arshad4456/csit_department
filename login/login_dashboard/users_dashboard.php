@@ -55,6 +55,47 @@ include 'db_connection.php'; // Include your database connection
 <?php include 'include/delete_modals.php'; ?>
 
 <script>
+
+
+function viewUser(userId, userType) {
+    $.ajax({
+        url: 'include/view_modals.php', // This should handle fetching data for view modal
+        method: 'POST',
+        data: { user_id: userId, user_type: userType },
+        success: function(response) {
+            $('#viewUserModal .modal-body').html(response); // Populate the modal with the user details
+            $('#viewUserModal').modal('show');
+        }
+    });
+}
+
+function editUser(userId, userType) {
+    $.ajax({
+        url: 'edit_modals.php', // This should handle fetching data for edit modal
+        method: 'POST',
+        data: { user_id: userId, user_type: userType },
+        success: function(response) {
+            $('#editUserModal .modal-body').html(response); // Populate the modal with the user details
+            $('#editUserModal').modal('show');
+        }
+    });
+}
+
+function deleteUser(userId, userType) {
+    $.ajax({
+        url: 'delete_modals.php', // This should handle fetching data for delete modal
+        method: 'POST',
+        data: { user_id: userId, user_type: userType },
+        success: function(response) {
+            $('#deleteUserModal .modal-body').html(response); // Populate the modal with the user details
+            $('#deleteUserModal').modal('show');
+        }
+    });
+}
+
+
+
+
 function fetchUsers(userType) {
     $.ajax({
         url: 'fetch_user.php',

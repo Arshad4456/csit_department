@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mysqli->query($query);
         }
         fclose($handle);
-        header("Location: users_dashboard.php?success=1");
+        header("Location: ../users_dashboard.php?success=1");
     } else {
         echo "Error opening CSV file.";
     }
