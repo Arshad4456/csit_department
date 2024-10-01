@@ -6,20 +6,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userType = $_POST['user_type'];
     $password = $_POST['password'];
 
-    // Check if the user is admin, faculty, or monitor and use email for login
     if ($userType === 'admin' || $userType === 'faculty' || $userType === 'monitor') {
         $email = $_POST['email'];
+        
+        // Select the appropriate table based on user type
+        if ($userType === 'admin') {
+            $query = "SELECT * FROM admins WHERE email = ?";
+        } elseif ($userType === 'faculty') {
+            $query = "SELECT * FROM faculty WHERE email = ?";
+        } elseif ($userType === 'monitor') {
+            $query = "SELECT * FROM monitors WHERE email = ?";
+        }
 
-        // Prepare the SQL statement to prevent SQL injection
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND user_type = ?");
-        $stmt->bind_param("ss", $email, $userType);
+        // Prepare and execute the query
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $email);
+
     } elseif ($userType === 'student') {
-        // For students, use registration_no for login
         $registration_no = $_POST['registration_no'];
 
-        // Prepare the SQL statement for student login
-        $stmt = $conn->prepare("SELECT * FROM users WHERE registration_no = ? AND user_type = ?");
-        $stmt->bind_param("ss", $registration_no, $userType);
+        // Query for students using registration_no
+        $query = "SELECT * FROM students WHERE registration_no = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $registration_no);
     }
 
     $stmt->execute();
@@ -30,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Store the user's data in the session
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['email'] = $user['email'] ?? null; // For admin/faculty/monitor
-        $_SESSION['registration_no'] = $user['registration_no'] ?? null; // For students
-        $_SESSION['user_type'] = $user['user_type'];
+        $_SESSION['email'] = $user['email'] ?? null;
+        $_SESSION['registration_no'] = $user['registration_no'] ?? null;
+        $_SESSION['user_type'] = $userType;
 
         // Redirect based on user type
         if ($userType === 'admin') {
@@ -104,6 +113,7 @@ $conn->close();
       margin-bottom: 20px;
     }
   </style>
+    <!-- Same head section as before -->
 </head>
 <body>
   <div class="container">
@@ -121,12 +131,13 @@ $conn->close();
             <option value="student">Student</option>
           </select>
         </div>
+
         <div class="form-group" id="emailOrRegNo">
-          <label for="email">Username:</label>
+          <label for="email">Email:</label>
           <input type="email" class="form-control" id="email" name="email" required>
         </div>
         <div class="form-group" id="registrationNo" style="display: none;">
-          <label for="registration_no">Usename:</label>
+          <label for="registration_no">Registration No:</label>
           <input type="text" class="form-control" id="registration_no" name="registration_no">
         </div>
         <div class="form-group password-container">
@@ -135,10 +146,10 @@ $conn->close();
           <i class="fas fa-eye" id="togglePassword"></i>
         </div>
         <div class="checkbox mb-3">
-              <label>
-                <input type="checkbox" value="remember-me"> Remember me
-              </label>
-            </div>
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
       </form>
     </div>
