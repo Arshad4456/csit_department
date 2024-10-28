@@ -1,181 +1,183 @@
 <?php
 session_start();
-include('db_connection.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userType = $_POST['user_type'];
-    $password = $_POST['password'];
+// Connect to the database
+$mysqli = new mysqli("localhost", "root", "", "csit_login_db");
 
-    if ($userType === 'admin' || $userType === 'faculty' || $userType === 'monitor') {
-        $email = $_POST['email'];
-        
-        // Select the appropriate table based on user type
-        if ($userType === 'admin') {
-            $query = "SELECT * FROM admins WHERE email = ?";
-        } elseif ($userType === 'faculty') {
-            $query = "SELECT * FROM faculty WHERE email = ?";
-        } elseif ($userType === 'monitor') {
-            $query = "SELECT * FROM monitors WHERE email = ?";
-        }
-
-        // Prepare and execute the query
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $email);
-
-    } elseif ($userType === 'student') {
-        $registration_no = $_POST['registration_no'];
-
-        // Query for students using registration_no
-        $query = "SELECT * FROM students WHERE registration_no = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $registration_no);
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-
-    if ($user && password_verify($password, $user['password_hash'])) {
-        // Store the user's data in the session
-        session_regenerate_id(true);
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['email'] = $user['email'] ?? null;
-        $_SESSION['registration_no'] = $user['registration_no'] ?? null;
-        $_SESSION['user_type'] = $userType;
-
-        // Redirect based on user type
-        if ($userType === 'admin') {
-            header('Location: ../admin/admin_dashboard/admin_dashboard.php');
-        } elseif ($userType === 'faculty') {
-            header('Location: ../faculty/faculty_dashboard.php');
-        } elseif ($userType === 'monitor') {
-            header('Location: ../monitor/monitor_dashboard.php');
-        } elseif ($userType === 'student') {
-            header('Location: ../student/student_log.php');
-        }
-        exit();
-    } else {
-        $error_message = "Invalid login credentials. Please try again.";
-    }
-
-    $stmt->close();
+if ($mysqli->connect_error) {
+    die("Database connection failed: " . $mysqli->connect_error);
 }
 
-$conn->close();
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_type = $_POST['user_type'] ?? '';
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    if (empty($user_type) || empty($username) || empty($password)) {
+        $error_message = "All fields are required.";
+    } else {
+        switch ($user_type) {
+            case 'admin':
+                $query = "SELECT id, password FROM admins WHERE email = ?";
+                break;
+            case 'monitor':
+                $query = "SELECT id, password FROM monitors WHERE email = ?";
+                break;
+            case 'faculty':
+                $query = "SELECT id, password FROM faculty WHERE email = ?";
+                break;
+            case 'student':
+                $query = "SELECT id, password FROM students WHERE registration_no = ?";
+                break;
+            default:
+                $error_message = "Invalid user type selected.";
+                break;
+        }
+
+        if (empty($error_message)) {
+            $stmt = $mysqli->prepare($query);
+            if ($stmt) {
+                $stmt->bind_param("s", $username);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    $user = $result->fetch_assoc();
+
+                    // Check plain text password
+                    if ($password === $user['password']) {
+                        $_SESSION['user_type'] = $user_type;
+                        $_SESSION['user_id'] = $user['id'];
+
+                        // Redirect to respective dashboards
+                        switch ($user_type) {
+                            case 'admin':
+                                header("Location: ../admin/admin_dashboard/admin_dashboard.php");
+                                break;
+                            case 'monitor':
+                                header("Location: ../admin/admin_dashboard/admin_dashboard.php");
+                                break;
+                            case 'faculty':
+                                header("Location: ../faculty/faculty_dashboard.php");
+                                break;
+                            case 'student':
+                                header("Location: ../student/student_dashboard.php");
+                                break;
+                            default:
+                                header("Location: login.php"); // Fallback
+                                break;
+                        }
+                        exit();
+                    } else {
+                        $error_message = "Invalid password.";
+                    }
+                } else {
+                    $error_message = "Invalid username or user type.";
+                }
+                $stmt->close();
+            } else {
+                $error_message = "Failed to prepare the query.";
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <style>
-    body {
-      background-color: #f8f9fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .login-form {
-      max-width: 400px;
-      margin: 50px auto;
-      width: 100%;
-      background: #fff;
-      padding: 30px;
-      border-radius: 5px;
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    }
-    .login-form h2 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .password-container {
-      position: relative;
-    }
-    .password-container input {
-      width: 100%;
-      padding-right: 40px;
-    }
-    .password-container .fa-eye {
-      position: absolute;
-      right: 10px;
-      top: 73%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #2c3be3;
-    }
-    .alert {
-      margin-bottom: 20px;
-    }
-  </style>
-    <!-- Same head section as before -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Font Awesome for Eye Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        p {
+            text-align: center;
+            color: red;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="login-form">
-      <h2>Login</h2>
-      <?php if (isset($error_message)) { echo '<div class="alert alert-danger">' . $error_message . '</div>'; } ?>
-      <form action="login.php" method="post">
-        <div class="form-group">
-          <label for="userType">User Type:</label>
-          <select class="form-control" id="userType" name="user_type" required>
-            <option value="" disabled selected>Select User Type</option>
+    
+    <?php if (!empty($error_message)): ?>
+        <p><?php echo htmlspecialchars($error_message); ?></p>
+    <?php endif; ?>
+
+    <form action="login.php" method="POST">
+    <h2>User Login</h2>
+        <label for="user_type">Select User Type:</label>
+        <select id="user_type" name="user_type" class="form-control" required>
+            <option value="">--Select--</option>
             <option value="admin">Admin</option>
             <option value="monitor">Monitor</option>
-            <option value="faculty">Faculty Member</option>
+            <option value="faculty">Faculty</option>
             <option value="student">Student</option>
-          </select>
-        </div>
+        </select><br>
 
-        <div class="form-group" id="emailOrRegNo">
-          <label for="email">Email:</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="form-group" id="registrationNo" style="display: none;">
-          <label for="registration_no">Registration No:</label>
-          <input type="text" class="form-control" id="registration_no" name="registration_no">
-        </div>
-        <div class="form-group password-container">
-          <label for="password">Password:</label>
-          <input type="password" class="form-control" id="password" name="password" required>
-          <i class="fas fa-eye" id="togglePassword"></i>
-        </div>
-        <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
-      </form>
-    </div>
-  </div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" class="form-control" required><br>
 
-  <script>
-    document.getElementById("togglePassword").addEventListener("click", function() {
-      var passwordField = document.getElementById("password");
-      var type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-      passwordField.setAttribute("type", type);
-      this.classList.toggle("fa-eye-slash");
-    });
+        <label for="password">Password:</label>
+        <div class="input-group mb-3">
+            <input type="password" id="password" name="password" class="form-control" required>
+            <div class="input-group-append">
+                <span class="input-group-text" id="toggle-password">
+                    <i class="fas fa-eye" id="eye-icon"></i>
+                </span>
+            </div>
+        </div>
+        <p>In case of password forget,contact to the department.</p>
+        <button type="submit" class="btn btn-success btn-block">Login</button>
+    </form>
 
-    document.getElementById("userType").addEventListener("change", function() {
-      var userType = this.value;
-      var emailOrRegNo = document.getElementById("emailOrRegNo");
-      var registrationNo = document.getElementById("registrationNo");
-
-      if (userType === 'student') {
-        emailOrRegNo.style.display = "none";
-        registrationNo.style.display = "block";
-      } else {
-        emailOrRegNo.style.display = "block";
-        registrationNo.style.display = "none";
-      }
-    });
-  </script>
+    <script>
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        });
+    </script>
 </body>
 </html>

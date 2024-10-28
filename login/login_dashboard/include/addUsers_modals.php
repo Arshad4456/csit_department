@@ -13,6 +13,7 @@
           <div class="form-group">
             <label for="userType">User Type</label>
             <select class="form-control" id="userType" name="user_type" onchange="showFields()">
+              <option value="select">Select an option</option>
               <option value="admin">Admin</option>
               <option value="monitor">Monitor</option>
               <option value="faculty">Faculty</option>

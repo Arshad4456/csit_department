@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UI/UX</title>
+    <title>Faculty Dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -47,28 +47,25 @@
                     <h3>My Subjects</h3>
                 </a>
                 <a href="#">
-                    <span class="material-symbols-sharp">settings </span>
+                    <span class="material-symbols-sharp">receipt_long </span>
                     <h3>Student Attendance per subject</h3>
                 </a>
 
-                <a href="#">
+                <!-- <a href="#">
                     <span class="material-symbols-sharp">mail_outline </span>
                     <h3>subject's Results</h3>
                     <span class="msg_count">14</span>
-                </a>
-                <a href="#">
+                </a> -->
+                <!-- <a href="#">
                     <span class="material-symbols-sharp">report_gmailerrorred </span>
                     <h3>Reports</h3>
-                </a>
+                </a> -->
                 <a href="#">
                     <span class="material-symbols-sharp">settings </span>
                     <h3>settings</h3>
                 </a>
-                <a href="#">
-                    <span class="material-symbols-sharp">add </span>
-                    <h3>Add Product</h3>
-                </a>
-                <a href="../admin_log.php">
+                
+                <a href="../landing_page/main.php">
                     <span class="material-symbols-sharp">logout </span>
                     <h3>logout</h3>
                 </a>
@@ -95,24 +92,24 @@
 
                 <!-- start seling -->
                 <div class="sales">
-                    <span class="material-symbols-sharp">person_outline</span>
+                    <span class="material-symbols-sharp">receipt_long</span>
                     <div class="middle">
 
                         <div class="left">
                             <h3>Total Subjects</h3>
-                            <h1>150</h1>
+                            <h1>6</h1>
                         </div>
-                        <div class="progress">
+                        <!-- <div class="progress">
                             <svg>
                                 <circle r="30" cy="40" cx="40"></circle>
                             </svg>
                             <div class="number">
                                 <p>80%</p>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
-                    <small>Last Month</small>
+                    <!-- <small>Last Month</small> -->
                 </div>
                 <!-- end seling -->
 
@@ -120,49 +117,33 @@
                 
 
                 <!-- start expenses -->
-                <div class="expenses">
+                <!-- <div class="expenses">
                     <span class="material-symbols-sharp">person_outline</span>
                     <div class="middle">
 
                         <div class="left">
-                            <h3>Student Attendance per Month with percentage</h3>
-                            <h1>500</h1>
-                        </div>
-                        <div class="progress">
-                            <svg>
-                                <circle r="25" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>90%</p>
-                            </div>
+                            <h3>My leaves</h3>
+                            <h1>8</h1>
                         </div>
 
                     </div>
-                    <small>Last Month</small>
-                </div>
+                    <small>per Month</small>
+                </div> -->
                 <!-- end seling -->
 
                  <!-- start seling -->
-                 <div class="sales">
-                    <span class="material-symbols-sharp">person_outline</span>
+                 <!-- <div class="sales">
+                    <span class="material-symbols-sharp">receipt_long</span>
                     <div class="middle">
 
                         <div class="left">
                             <h3>Total Assignments</h3>
-                            <h1>150</h1>
+                            <h1>10</h1>
                         </div>
-                        <div class="progress">
-                            <svg>
-                                <circle r="30" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>80%</p>
-                            </div>
-                        </div>
+                        
 
                     </div>
-                    <small>Last Month</small>
-                </div>
+                </div> -->
                 <!-- end seling -->
 
                 <!-- start seling -->
@@ -172,17 +153,8 @@
 
                         <div class="left">
                             <h3>Total Leaves</h3>
-                            <h1>280</h1>
+                            <h1>2</h1>
                         </div>
-                        <div class="progress">
-                            <svg>
-                                <circle r="35" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>100%</p>
-                            </div>
-                        </div>
-
                     </div>
                     <small>Last Month</small>
                 </div>
@@ -190,50 +162,7 @@
 
             </div>
             <!-- end insights -->
-            <div class="recent_order">
-                <h2>Recent Applications</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Subject</th>
-                            <th>Date</th>
-                            <th>Attendance Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>leave</td>
-                            <td>full day</td>
-                            <td>other</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>Enrollement</td>
-                            <td>summer</td>
-                            <td>Others</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>leave</td>
-                            <td>full day</td>
-                            <td>other</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>Enrollement</td>
-                            <td>summer</td>
-                            <td>Others</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a href="#">Show All</a>
-            </div>
+            
 
         </main>
         <!------------------
@@ -266,7 +195,7 @@
                 </div>
             </div>
 
-            <div class="recent_updates">
+            <!-- <div class="recent_updates">
                 <h2>Recent Update</h2>
                 <div class="updates">
                     <div class="update">
@@ -294,7 +223,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
             <!-- <div class="sales-analytics">
@@ -344,11 +273,11 @@
 
             </div> -->
 <br><br>
-            <div class="item add_product">
+            <!-- <div class="item add_product">
                 <div>
                     <span class="material-symbols-sharp">add</span>
                 </div>
-            </div>
+            </div> -->
         </div>
 
 
