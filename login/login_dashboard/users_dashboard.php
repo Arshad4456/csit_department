@@ -59,7 +59,7 @@ include 'db_connection.php'; // Include your database connection
 
 function viewUser(userId, userType) {
     $.ajax({
-        url: 'include/view_modals.php', // This should handle fetching data for view modal
+        url: ' include/view_modals.php', // This should handle fetching data for view modal
         method: 'POST',
         data: { user_id: userId, user_type: userType },
         success: function(response) {
@@ -71,7 +71,7 @@ function viewUser(userId, userType) {
 
 function editUser(userId, userType) {
     $.ajax({
-        url: 'edit_modals.php', // This should handle fetching data for edit modal
+        url: 'include/edit_modals.php', // This should handle fetching data for edit modal
         method: 'POST',
         data: { user_id: userId, user_type: userType },
         success: function(response) {
@@ -83,7 +83,7 @@ function editUser(userId, userType) {
 
 function deleteUser(userId, userType) {
     $.ajax({
-        url: 'delete_modals.php', // This should handle fetching data for delete modal
+        url: 'include/delete_modals.php', // This should handle fetching data for delete modal
         method: 'POST',
         data: { user_id: userId, user_type: userType },
         success: function(response) {

@@ -1,28 +1,30 @@
 <?php
-include 'db_connection.php'; // Database connection
+include 'db_connection.php'; // Include your database connection file
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user_type = $_POST['csv_user_type'];
-    $csv_file = $_FILES['csv_file']['tmp_name'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['csv_file'])) {
+    $userType = $_POST['csv_user_type'];
+    $file = $_FILES['csv_file']['tmp_name'];
 
-    if (($handle = fopen($csv_file, "r")) !== false) {
-        while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-            if ($user_type == 'student') {
-                // Columns: name, father_name, cnic, program, registration_no, batch, email, password_hash
-                $query = "INSERT INTO students (name, father_name, cnic, program, registration_no, batch, email, password_hash)
-                          VALUES ('$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '".password_hash($data[7], PASSWORD_DEFAULT)."')";
-            } else {
-                // Columns: name, designation, email, password_hash
-                $query = "INSERT INTO $user_type (name, designation, email, password_hash)
-                          VALUES ('$data[0]', '$data[1]', '$data[2]', '".password_hash($data[3], PASSWORD_DEFAULT)."')";
+    if (($handle = fopen($file, 'r')) !== FALSE) {
+        fgetcsv($handle); // Skip the header row
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            if ($userType === 'admin' || $userType === 'monitor' || $userType === 'faculty') {
+                // Assuming the CSV columns match the database fields for Admin, Monitor, Faculty
+                $sql = "INSERT INTO " . ($userType === 'admin' ? 'admins' : ($userType === 'monitor' ? 'monitors' : 'faculty')) . " (honorific, name, father_name, gender, cnic, employee_number, designation, contact_number, address, qualification, email, password)
+                        VALUES ('$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]')";
+            } elseif ($userType === 'student') {
+                // Assuming the CSV columns match the database fields for Student
+                $sql = "INSERT INTO students (name, father_name, gender, cnic, registration_no, contact_no, address, batch, email, password)
+                        VALUES ('$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]')";
             }
 
-            $mysqli->query($query);
+            mysqli_query($conn, $sql);
         }
         fclose($handle);
-        header("Location: ../users_dashboard.php?success=1");
+        mysqli_close($conn);
+        header("Location: test.php"); // Redirect to the dashboard
     } else {
-        echo "Error opening CSV file.";
+        echo "Error opening the file.";
     }
 }
 ?>

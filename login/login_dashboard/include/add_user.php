@@ -1,65 +1,59 @@
 <?php
-// Database connection
-$mysqli = new mysqli("localhost", "username", "password", "csit_login_db");
+include 'db_connection.php'; // Include your database connection file
 
-// Check connection
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
-
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user_type = $_POST['user_type'];
+    $userType = $_POST['user_type'];
 
-    if ($user_type == 'student') {
-        // Insert into 'students' table
-        $name = $_POST['student_name'];
-        $father_name = $_POST['father_name'];
+    if ($userType === 'admin' || $userType === 'monitor' || $userType === 'faculty') {
+        // Common fields for Admin, Monitor, and Faculty
+        $honorific = $_POST['honorific'];
+        $name = $_POST['name'];
+        $fatherName = $_POST['father_name'];
         $gender = $_POST['gender'];
         $cnic = $_POST['cnic'];
-        $program = $_POST['program'];
-        $registration_no = $_POST['registration_no'];
-        $contact_no = $_POST['contact_no'];
+        $employeeNumber = $_POST['employee_number'];
+        $designation = $_POST['designation'];
+        $contactNumber = $_POST['contact_number'];
+        $address = $_POST['address'];
+        $qualification = $_POST['qualification'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        // Insert into the respective table
+        $table = $userType === 'admin' ? 'admins' : ($userType === 'monitor' ? 'monitors' : 'faculty');
+        $sql = "INSERT INTO $table (honorific, name, father_name, gender, cnic, employee_number, designation, contact_number, address, qualification, email, password)
+                VALUES ('$honorific', '$name', '$fatherName', '$gender', '$cnic', '$employeeNumber', '$designation', '$contactNumber', '$address', '$qualification', '$email', '$password')";
+
+        if (mysqli_query($conn, $sql)) {
+            echo "New record created successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
+    } elseif ($userType === 'student') {
+        // Fields for Student
+        $studentName = $_POST['student_name'];
+        $fatherName = $_POST['father_name'];
+        $gender = $_POST['gender'];
+        $cnic = $_POST['cnic'];
+        $registrationNo = $_POST['registration_no'];
+        $contactNo = $_POST['contact_no'];
         $address = $_POST['address'];
         $batch = $_POST['batch'];
-        $email = $_POST['student_email'];
-        $password_hash = password_hash($_POST['student_password'], PASSWORD_BCRYPT);
+        $studentEmail = $_POST['student_email'];
+        $studentPassword = $_POST['student_password'];
 
-        $sql = "INSERT INTO students (name, father_name, gender, cnic, program, registration_no, 
-                contact_no, address, batch, email, password_hash) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Insert into the students table
+        $sql = "INSERT INTO students (name, father_name, gender, cnic, registration_no, contact_no, address, batch, email, password)
+                VALUES ('$studentName', '$fatherName', '$gender', '$cnic', '$registrationNo', '$contactNo', '$address', '$batch', '$studentEmail', '$studentPassword')";
 
-        $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("sssssssssss", $name, $father_name, $gender, $cnic, $program, 
-                          $registration_no, $contact_no, $address, $batch, $email, $password_hash);
-    } else {
-        // Insert into 'admins', 'monitors', or 'faculty' table
-        $name = $_POST['name'];
-        $designation = $_POST['designation'];
-        $email = $_POST['email'];
-        $password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-
-        if ($user_type == 'admin') {
-            $sql = "INSERT INTO admins (name, designation, email, password_hash) VALUES (?, ?, ?, ?)";
-        } elseif ($user_type == 'monitor') {
-            $sql = "INSERT INTO monitors (name, designation, email, password_hash) VALUES (?, ?, ?, ?)";
+        if (mysqli_query($conn, $sql)) {
+            echo "New student record created successfully";
         } else {
-            $sql = "INSERT INTO faculty (name, designation, email, password_hash) VALUES (?, ?, ?, ?)";
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
-
-        $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("ssss", $name, $designation, $email, $password_hash);
     }
 
-    // Execute the query and check for success
-    if ($stmt->execute()) {
-        echo "<script>alert('User added successfully!'); window.location.href='users_dashboard.php';</script>";
-    } else {
-        echo "<script>alert('Error adding user: " . $stmt->error . "'); window.history.back();</script>";
-    }
-
-    $stmt->close();
+    mysqli_close($conn);
+    header("Location: test.php"); // Redirect to the dashboard
 }
-
-$mysqli->close();
 ?>
