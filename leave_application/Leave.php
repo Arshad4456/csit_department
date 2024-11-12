@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ssssssssi", $name, $fatherName, $registrationNo, $reason, $email, $leaveType, $startDate, $endDate, $daysDifference);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Application updated successfully.'); window.location.href = 'leave_dashboard/leave_dash.php';</script>";
+                echo "<script>alert('Application updated successfully.'); window.location.href = 'leave.php';</script>";
             } else {
                 echo "Error adding record: " . $conn->error;
             }
