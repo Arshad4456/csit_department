@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "leave_management";
+$dbname = "csit_leave_management";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

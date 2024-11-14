@@ -30,9 +30,9 @@ $result = mysqli_query($conn, "SELECT * FROM programs ORDER BY id ASC");
                         <!-- Display program name -->
                         <h3 class="card-title"><?php echo htmlspecialchars($row['program_name']); ?></h3>
                         <!-- Display button -->
-                        <button class="btn bg-warning text-dark">
+                        <!-- <button class="btn bg-warning text-dark">
                             <a href="<?php echo htmlspecialchars($row['button_link']); ?>" class="text-decoration-none"><?php echo htmlspecialchars($row['button_text']); ?></a>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             </div>

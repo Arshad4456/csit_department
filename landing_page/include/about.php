@@ -25,7 +25,7 @@ $learn_more_link = isset($data['learn_more_link']) ? htmlspecialchars($data['lea
                     <h2><?php echo $title; ?></h2>
                     <h1>Message</h1>
                     <p><?php echo $content; ?></p>
-                    <a href="<?php echo $learn_more_link; ?>" class="btn btn-warning">Get More Information</a>
+                    
                 </div>
             </div>
         </div>

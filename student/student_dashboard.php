@@ -15,8 +15,8 @@
         <aside>
 
             <div class="top">
-                <div class="logo">
-                    <h2>Csit <span class="danger">Department</span> </h2>
+                <div class="logo" style="color:blue;">
+                    <h2>Csit Department </h2>
                 </div>
                 <div class="close" id="close_btn">
                     <span class="material-symbols-sharp">
@@ -31,12 +31,12 @@
                     <span class="material-symbols-sharp">grid_view </span>
                     <h3>Dashboard</h3>
                 </a>
-                <!-- <a href="../../login/login_dashboard/users_dashboard.php" class="active">
-                    <span class="material-symbols-sharp">person_outline </span>
-                    <h3>users</h3>
-                </a> -->
-
                 
+                <a href="#" class="active">
+                    <span class="material-symbols-sharp">person_outline </span>
+                    <h3>chatbot</h3>
+                </a>
+
                 <a href="../enrollment_form/enrollment.php">
                     <span class="material-symbols-sharp">receipt_long </span>
                     <h3>Enrollement System</h3>
@@ -46,10 +46,11 @@
                     <span class="material-symbols-sharp">receipt_long </span>
                     <h3>Leave System</h3>
                 </a>
-                <!-- <a href="../../landing_page/mainpage_settings.php">
-                    <span class="material-symbols-sharp">settings </span>
-                    <h3>Main Page settings</h3>
-                </a> -->
+                <a href="../gpa_calculation/gpa_predictions.html">
+                    <span class="material-symbols-sharp">receipt_long </span>
+                    <h3>Calculate GPA</h3>
+                </a>
+               
 
                 <a href="#">
                     <span class="material-symbols-sharp">mail_outline </span>
@@ -91,147 +92,7 @@
 
            
 
-            <!-- <div class="insights"> -->
-
-                <!-- start seling -->
-                <!-- <div class="sales"> -->
-                    <!-- <span class="material-symbols-sharp">person_outline</span> -->
-                    <!-- <div class="middle">
-
-                        <div class="left">
-                            <h3>Total enrollment form</h3>
-                            <h1>1</h1>
-                        </div> -->
-                        <!-- <div class="progress">
-                            <svg>
-                                <circle r="30" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>80%</p>
-                            </div>
-                        </div> -->
-
-                    <!-- </div>
-                    
-                </div> -->
-                <!-- end seling -->
-
-
-                
-
-                <!-- start expenses -->
-                <!-- <div class="expenses">
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Leaves</h3>
-                            <h1>5</h1>
-                        </div> -->
-                        <!-- <div class="progress">
-                            <svg>
-                                <circle r="25" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>90%</p>
-                            </div>
-                        </div> -->
-
-                    <!-- </div>
-                </div> -->
-                <!-- end seling -->
-
-                 <!-- start seling -->
-                 <!-- <div class="sales"> -->
-                    <!-- <span class="material-symbols-sharp">person_outline</span>
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Enrollement Forms</h3>
-                            <h1>150</h1>
-                        </div>
-                        <div class="progress">
-                            <svg>
-                                <circle r="30" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>80%</p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <small>Last Month</small> -->
-                <!-- </div> -->
-                <!-- end seling -->
-
-                <!-- start seling -->
-                <!-- <div class="income"> -->
-                    <!-- <span class="material-symbols-sharp">mail_outline</span>
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Leaves</h3>
-                            <h1>280</h1>
-                        </div>
-                        <div class="progress">
-                            <svg>
-                                <circle r="35" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>100%</p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <small>Last Month</small> -->
-                <!-- </div> -->
-                <!-- end seling -->
-
-            <!-- </div> -->
-            <!-- end insights
-            <div class="recent_order">
-                <h2>Recent Applications</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Applicaion Name</th>
-                            <th>Application Type</th>
-                            <th>Others</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>leave</td>
-                            <td>full day</td>
-                            <td>other</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>Enrollement</td>
-                            <td>summer</td>
-                            <td>Others</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>leave</td>
-                            <td>full day</td>
-                            <td>other</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>Enrollement</td>
-                            <td>summer</td>
-                            <td>Others</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a href="#">Show All</a>
-            </div> -->
+           
 
         </main>
         <!------------------

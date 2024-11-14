@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Monitor Dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -15,7 +15,7 @@
         <aside>
 
             <div class="top">
-                <div class="logo" style="color:blue;" >
+                <div class="logo" style="color:blue;">
                     <h2>Csit Department </h2>
                 </div>
                 <div class="close" id="close_btn">
@@ -37,26 +37,22 @@
                     <h3>chatbot</h3>
                 </a>
 
-                <a href="../../login/login_dashboard/users_dashboard.php">
+                <a href="../users_looking/users_looking.php" >
                     <span class="material-symbols-sharp">person_outline </span>
                     <h3>users</h3>
                 </a>
-
+ 
                 
-                <a href="../../enrollment_form/enrollment_dashboard/enrollment_dash.php">
+                <a href="../enrollment_looking/enrollment_looking.php">
                     <span class="material-symbols-sharp">receipt_long </span>
                     <h3>Enrollement System</h3>
                 </a>
 
-                <a href="../../leave_application/leave_dashboard/leave_dash.php">
+                <a href="../leave_looking/leave_looking.php">
                     <span class="material-symbols-sharp">receipt_long </span>
                     <h3>Leave System</h3>
                 </a>
-                <a href="../../landing_page/mainpage_settings.php">
-                    <span class="material-symbols-sharp">settings </span>
-                    <h3>Main Page settings</h3>
-                </a>
-
+                
                 <a href="#">
                     <span class="material-symbols-sharp">mail_outline </span>
                     <h3>Messages</h3>
@@ -93,154 +89,9 @@
       --------------- -->
 
         <main>
-            <h1>Admin Dashboard</h1>
+            <h1>Monitor Dashboard</h1>
 
-           
-
-            <!-- <div class="insights"> -->
-
-                <!-- start seling -->
-                <!-- <div class="sales">
-                    <span class="material-symbols-sharp">person_outline</span>
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Faculty Members</h3>
-                            <h1>40</h1>
-                        </div> -->
-                        <!-- <div class="progress">
-                            <svg>
-                                <circle r="30" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>80%</p>
-                            </div>
-                        </div> -->
-
-                    <!-- </div> -->
-                    <!-- <small>Last Month</small> -->
-                <!-- </div> -->
-                <!-- end seling -->
-
-
-                
-
-                <!-- start expenses -->
-                <!-- <div class="expenses">
-                    <span class="material-symbols-sharp">person_outline</span>
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Student</h3>
-                            <h1>400</h1>
-                        </div> -->
-                        <!-- <div class="progress">
-                            <svg>
-                                <circle r="25" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>90%</p>
-                            </div>
-                        </div> -->
-
-                    <!-- </div> -->
-                    <!-- <small>Last Month</small> -->
-                <!-- </div> -->
-                <!-- end seling -->
-
-                 <!-- start seling -->
-                 <!-- <div class="sales">
-                    <span class="material-symbols-sharp">person_outline</span>
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Enrollement Forms</h3>
-                            <h1>60</h1>
-                        </div> -->
-                        <!-- <div class="progress">
-                            <svg>
-                                <circle r="30" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>80%</p>
-                            </div>
-                        </div> -->
-
-                    <!-- </div> -->
-                    <!-- <small>Last Month</small> -->
-                <!-- </div> -->
-                <!-- end seling -->
-
-                <!-- start seling -->
-                <!-- <div class="income">
-                    <span class="material-symbols-sharp">mail_outline</span>
-                    <div class="middle">
-
-                        <div class="left">
-                            <h3>Total Leaves</h3>
-                            <h1>20</h1>
-                        </div> -->
-                        <!-- <div class="progress">
-                            <svg>
-                                <circle r="35" cy="40" cx="40"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>100%</p>
-                            </div>
-                        </div> -->
-
-                    <!-- </div>
-                    <small>Last Month</small>
-                </div> -->
-                <!-- end seling -->
-
-            <!-- </div> -->
-            <!-- end insights -->
-            <!-- <div class="recent_order">
-                <h2>Recent Applications</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Applicaion Name</th>
-                            <th>Application Type</th>
-                            <th>Others</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>leave</td>
-                            <td>multiple day</td>
-                            <td>other</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>Enrollement</td>
-                            <td>summer</td>
-                            <td>Others</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>leave</td>
-                            <td>single day</td>
-                            <td>other</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                        <tr>
-                            <td>Enrollement</td>
-                            <td>summer</td>
-                            <td>Others</td>
-                            <td class="warning">Pending</td>
-                            <td class="primary">Details</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <a href="#">Show All</a>
-            </div> -->
-
+        
         </main>
         <!------------------
          end main

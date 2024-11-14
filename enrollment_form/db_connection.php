@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root"; // Default MySQL username
 $password = ""; // Default MySQL password is empty
-$dbname = "enrollment_system"; // Database name
+$dbname = "csit_enrollment_system"; // Database name
 
 try {
     $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

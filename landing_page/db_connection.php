@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root"; // Your database username
 $password = ""; // Your database password
-$dbname = "landing_page"; // Your database name
+$dbname = "csit_landing_page"; // Your database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

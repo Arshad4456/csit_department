@@ -41,7 +41,9 @@ $links = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <?php endforeach; ?>
                 </ul>
                 <form class="d-flex ms-3">
-                    <button class="btn btn-outline-success" type="submit" id="openPageButton">ask me about Department</button>
+                
+                    <button class="btn btn-outline-success" type="submit">ask me about Department</button>
+                
                 </form>
 
                 <!-- <div class="dropdown ms-3">

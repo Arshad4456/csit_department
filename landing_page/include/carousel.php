@@ -28,7 +28,7 @@ $result = mysqli_query($conn, "SELECT * FROM carousel ORDER BY id ASC");
             echo '<div class="carousel-caption">';
             echo '<h5>'.$row['caption_title'].'</h5>';
             echo '<p>'.$row['caption_text'].'</p>';
-            echo '<p><a href="'.$row['button_link'].'" class="btn btn-warning mt-3">'.$row['button_text'].'</a></p>';
+            // echo '<p><a href="'.$row['button_link'].'" class="btn btn-warning mt-3">'.$row['button_text'].'</a></p>';
             echo '</div></div>';
             $i--;
         }
