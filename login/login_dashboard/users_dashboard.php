@@ -1,7 +1,4 @@
-<?php
-include 'db_connection.php'; // Include your database connection
-?>
-
+<?php include 'db_connection.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,96 +12,102 @@ include 'db_connection.php'; // Include your database connection
 <div class="container mt-4">
     <h2>Users Dashboard</h2>
 
-    <!-- Add User and Add Multiple Users Buttons -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
-        Add Single User
-    </button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addMultipleUsersModal">
-        Add Multiple Users via CSV
-    </button>
-
     <!-- User Type Buttons -->
-    <div class="mt-3">
+    <div class="mb-3">
         <button class="btn btn-info" onclick="fetchUsers('admin')">Admins</button>
         <button class="btn btn-info" onclick="fetchUsers('monitor')">Monitors</button>
         <button class="btn btn-info" onclick="fetchUsers('faculty')">Faculties</button>
         <button class="btn btn-info" onclick="fetchUsers('student')">Students</button>
+        <button class="btn btn-success float-right" data-toggle="modal" data-target="#addUserModal">Add Single User</button>
     </div>
 
     <!-- Users Table -->
-    <div class="mt-4">
-        <table class="table table-bordered" id="usersTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="userTableBody">
-                <!-- Data will be populated here -->
-            </tbody>
-        </table>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            <!-- Fetched users will appear here -->
+        </tbody>
+    </table>
 </div>
 
-<!-- Include modals for Add User, Edit User, View User, Delete User -->
-<?php include 'include/addUsers_modals.php'; ?>
-<?php include 'include/view_modals.php'; ?>
-<?php include 'include/edit_modals.php'; ?>
-<?php include 'include/delete_modals.php'; ?>
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">User Details</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="userDetailsContent">
+        <!-- Details via AJAX -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <form id="addUserForm" action="backend/add_user.php" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Single User</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+
+          <!-- User Type -->
+          <div class="form-group">
+            <label for="user_type">User Type</label>
+            <select name="user_type" id="user_type" class="form-control" required onchange="loadUserFormFields(this.value)">
+              <option value="">Select User Type</option>
+              <option value="admin">Admin</option>
+              <option value="monitor">Monitor</option>
+              <option value="faculty">Faculty</option>
+              <option value="student">Student</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Fields -->
+          <div id="dynamicUserFields"></div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <script>
-
-
-function viewUser(userId, userType) {
-    $.ajax({
-        url: ' include/view_modals.php', // This should handle fetching data for view modal
-        method: 'POST',
-        data: { user_id: userId, user_type: userType },
-        success: function(response) {
-            $('#viewUserModal .modal-body').html(response); // Populate the modal with the user details
-            $('#viewUserModal').modal('show');
-        }
-    });
-}
-
-function editUser(userId, userType) {
-    $.ajax({
-        url: 'include/edit_modals.php', // This should handle fetching data for edit modal
-        method: 'POST',
-        data: { user_id: userId, user_type: userType },
-        success: function(response) {
-            $('#editUserModal .modal-body').html(response); // Populate the modal with the user details
-            $('#editUserModal').modal('show');
-        }
-    });
-}
-
-function deleteUser(userId, userType) {
-    $.ajax({
-        url: 'include/delete_modals.php', // This should handle fetching data for delete modal
-        method: 'POST',
-        data: { user_id: userId, user_type: userType },
-        success: function(response) {
-            $('#deleteUserModal .modal-body').html(response); // Populate the modal with the user details
-            $('#deleteUserModal').modal('show');
-        }
-    });
-}
-
-
-
-
 function fetchUsers(userType) {
-    $.ajax({
-        url: 'fetch_user.php',
-        method: 'POST',
-        data: { user_type: userType },
-        success: function(response) {
-            $('#userTableBody').html(response);
-        }
+    $.post('fetch_user.php', { user_type: userType }, function(response) {
+        $('#userTableBody').html(response);
     });
+}
+
+function viewUser(id, type) {
+    $.post('include/view_modals.php', { user_id: id, user_type: type }, function(response) {
+        $('#userDetailsContent').html(response);
+        $('#viewUserModal').modal('show');
+    });
+}
+
+function loadUserFormFields(userType) {
+    if (userType) {
+        $.post('add_user_forms/add_' + userType + '.php', function(data) {
+            $('#dynamicUserFields').html(data);
+        });
+    } else {
+        $('#dynamicUserFields').html('');
+    }
 }
 </script>
 

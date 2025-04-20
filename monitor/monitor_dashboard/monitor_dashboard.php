@@ -103,9 +103,9 @@
         <div class="right">
 
             <div class="top">
-                <button id="menu_bar">
+                <!-- <button id="menu_bar">
                     <span class="material-symbols-sharp">menu</span>
-                </button>
+                </button> -->
 
                 <div class="theme-toggler">
                     <span class="material-symbols-sharp active">light_mode</span>

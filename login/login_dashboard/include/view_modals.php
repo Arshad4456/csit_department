@@ -1,27 +1,18 @@
-<?php
-include 'db_connection.php'; // Include DB connection
-
-if (isset($_POST['user_id']) && isset($_POST['user_type'])) {
-    $user_id = $_POST['user_id'];
-    $user_type = $_POST['user_type'];
-
-    if ($user_type == 'admin') {
-        $query = "SELECT * FROM admins WHERE id = $user_id";
-    } elseif ($user_type == 'monitor') {
-        $query = "SELECT * FROM monitors WHERE id = $user_id";
-    } elseif ($user_type == 'faculty') {
-        $query = "SELECT * FROM faculty WHERE id = $user_id";
-    } elseif ($user_type == 'student') {
-        $query = "SELECT * FROM students WHERE id = $user_id";
-    }
-
-    $result = $mysqli->query($query);
-    $user = $result->fetch_assoc();
-
-    // Display user information in the modal
-    echo "<p><strong>Name:</strong> " . $user['name'] . "</p>";
-    echo "<p><strong>Email:</strong> " . $user['email'] . "</p>";
-    echo "<p><strong>Contact No:</strong> " . $user['contact_no'] . "</p>";
-    // Add more fields based on user type if needed
-}
-?>
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewUserModalLabel">View User Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- User Info will be dynamically loaded here -->
+        <div id="userDetails"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

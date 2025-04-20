@@ -31,7 +31,7 @@
                     <span class="material-symbols-sharp">grid_view </span>
                     <h3>Dashboard</h3>
                 </a>
-                <a href="https://www.suit.edu.pk/#/Department/Computer-Science-~-IT" target="_blank" class="active">
+                <a href="#" class="active">
                     <span class="material-symbols-sharp">person_outline </span>
                     <h3>chatbot</h3>
                 </a>

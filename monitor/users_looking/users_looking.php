@@ -1,6 +1,4 @@
-<?php
-include 'db_connection.php'; // Include your database connection
-?>
+<?php include 'db_connection.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +13,6 @@ include 'db_connection.php'; // Include your database connection
 <div class="container mt-4">
     <h2>Users Dashboard</h2>
 
-
     <!-- User Type Buttons -->
     <div class="mt-3">
         <button class="btn btn-info" onclick="fetchUsers('admin')">Admins</button>
@@ -26,7 +23,7 @@ include 'db_connection.php'; // Include your database connection
 
     <!-- Users Table -->
     <div class="mt-4">
-        <table class="table table-bordered" id="usersTable">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -35,40 +32,30 @@ include 'db_connection.php'; // Include your database connection
                 </tr>
             </thead>
             <tbody id="userTableBody">
-                <!-- Data will be populated here -->
+                <!-- Fetched users will be displayed here -->
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Include modals for Add User, Edit User, View User, Delete User -->
-
-<?php include 'include/view_modals.php'; ?>
-
-
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" role="dialog" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">User Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- User info will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-
-
-function viewUser(userId, userType) {
-    $.ajax({
-        url: ' include/view_modals.php', // This should handle fetching data for view modal
-        method: 'POST',
-        data: { user_id: userId, user_type: userType },
-        success: function(response) {
-            $('#viewUserModal .modal-body').html(response); // Populate the modal with the user details
-            $('#viewUserModal').modal('show');
-        }
-    });
-}
-
-
-
-
-
-
-
-
 function fetchUsers(userType) {
     $.ajax({
         url: 'fetch_user.php',
@@ -76,6 +63,18 @@ function fetchUsers(userType) {
         data: { user_type: userType },
         success: function(response) {
             $('#userTableBody').html(response);
+        }
+    });
+}
+
+function viewUser(userId, userType) {
+    $.ajax({
+        url: 'include/view_modals.php',
+        method: 'POST',
+        data: { user_id: userId, user_type: userType },
+        success: function(response) {
+            $('#viewUserModal .modal-body').html(response);
+            $('#viewUserModal').modal('show');
         }
     });
 }
