@@ -1,66 +1,87 @@
-<!-- Add Single User Modal -->
-<div class="modal fade" id="addSingleUserModal" tabindex="-1" aria-labelledby="addSingleUserModalLabel" aria-hidden="true">
+<!-- Add Admin Modal -->
+<div class="modal fade" id="adminForm" tabindex="-1" aria-labelledby="addAdminLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addSingleUserModalLabel">Add Single User</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- User Type Selection -->
-        <div class="mb-3">
-          <label for="userType" class="form-label">User Type</label>
-          <select class="form-select" id="userType" name="user_type" required>
-            <option value="admin">Admin</option>
-            <option value="monitor">Monitor</option>
-            <option value="faculty">Faculty</option>
-            <option value="student">Student</option>
-          </select>
+    <form action="backend/add_user.php" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addAdminLabel">Add Admin</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        
-        <!-- Dynamic Form Fields Based on User Type -->
-        <div id="dynamicForm"></div>
-        
+        <div class="modal-body">
+          <input type="hidden" name="user_type" value="admin">
+          <?php include 'add_user_forms/add_admin.php'; ?>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add Admin</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveUser">Save User</button>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
 
-<!-- Add Multiple Users (CSV Upload) Modal -->
-<div class="modal fade" id="uploadCSVModal" tabindex="-1" aria-labelledby="uploadCSVModalLabel" aria-hidden="true">
+<!-- Add Monitor Modal -->
+<div class="modal fade" id="monitorForm" tabindex="-1" aria-labelledby="addMonitorLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadCSVModalLabel">Upload CSV for Multiple Users</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- User Type Selection for CSV Upload -->
-        <div class="mb-3">
-          <label for="csvUserType" class="form-label">User Type</label>
-          <select class="form-select" id="csvUserType" name="csv_user_type" required>
-            <option value="admin">Admin</option>
-            <option value="monitor">Monitor</option>
-            <option value="faculty">Faculty</option>
-            <option value="student">Student</option>
-          </select>
+    <form action="backend/add_user.php" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addMonitorLabel">Add Monitor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body">
+          <input type="hidden" name="user_type" value="monitor">
+          <?php include 'add_user_forms/add_monitor.php'; ?>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add Monitor</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-        <!-- CSV File Upload -->
-        <div class="mb-3">
-          <label for="csvFile" class="form-label">CSV File</label>
-          <input class="form-control" type="file" id="csvFile" accept=".csv" required>
+<!-- Add Faculty Modal -->
+<div class="modal fade" id="facultyForm" tabindex="-1" aria-labelledby="addFacultyLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="backend/add_user.php" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addFacultyLabel">Add Faculty</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        
+        <div class="modal-body">
+          <input type="hidden" name="user_type" value="faculty">
+          <?php include 'add_user_forms/add_faculty.php'; ?>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add Faculty</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="uploadCSV">Upload CSV</button>
+    </form>
+  </div>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal fade" id="studentForm" tabindex="-1" aria-labelledby="addStudentLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="backend/add_user.php" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addStudentLabel">Add Student</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="user_type" value="student">
+          <?php include 'add_user_forms/add_student.php'; ?>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add Student</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>

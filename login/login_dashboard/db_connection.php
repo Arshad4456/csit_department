@@ -1,12 +1,9 @@
 <?php
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "csit_login_db";
+$mysqli = new mysqli("localhost", "root", "", "csit_login_db");
 
-$mysqli = new mysqli($host, $username, $password, $database);
-
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
+// Check connection
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+    exit();
 }
 ?>
